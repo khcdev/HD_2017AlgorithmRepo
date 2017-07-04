@@ -1,111 +1,142 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct status{
-	int prev;
+typedef int Bool;
+enum BOOL{
+	False, True
+};
+
+typedef struct Status{
 	int now;
-	int next;
+	Bool isNext;
 }Status;
 enum STATUS{
-	RIPE = 1,
-	UNRIPE = 0,
-	EMPTY = -1
+	EMPTY = -1,
+	UNRIPE = 0, 
+	RIPE = 1
 };
-typedef int Bool;
-enum BOOL{ False, True };
 
-Bool infection(Status **boxes, int N, int M){
+
+Status **setting(int M, int N, int *cntUNRIPE){
+	Status **T;
 	int i, j;
-	Bool flag;
 	
-	for(i=0; i<M; i++){
-		for(j=0; j<N; j++){
-			boxes[i][j].next = boxes[i][j].now;
+	T = (Status **)malloc(N * sizeof(Status *));
+	if(T == NULL)		return NULL;
+	
+	*cntUNRIPE = 0;
+	for(i=0; i<N; i++){
+		T[i] = (Status *)malloc(M * sizeof(Status));
+		if(T[i] == NULL){
+			for(j=0; j<i; j++)	free(T[j]);
+			free(T);
+			return NULL;
+		}
+		
+		for(j=0; j<M; j++){
+			scanf("%d", &T[i][j].now);
+			T[i][j].isNext = False;
+			if(T[i][j].now == UNRIPE)	(*cntUNRIPE)++;
 		}
 	}
 	
-	for(i=0; i<M; i++){
-		for(j=0; j<N; j++){
-			if(boxes[i][j].now == RIPE){
-				//printf("%d %d\n", i, j);//monitering
-				if(i > 0 && boxes[i-1][j].now == UNRIPE)	{ boxes[i-1][j].next = RIPE; /*printf("U\n");*/ }
-				if(i < M-1 && boxes[i+1][j].now == UNRIPE)	{ boxes[i+1][j].next = RIPE; /*printf("D\n");*/ }
-				if(j > 0 && boxes[i][j-1].now == UNRIPE)	{ boxes[i][j-1].next = RIPE; /*printf("L\n");*/ }
-				if(j < N-1 && boxes[i][j+1].now == UNRIPE)	{ boxes[i][j+1].next = RIPE; /*printf("R\n");*/ }
+	return T;
+}
+
+int check(Status **T, int M, int N){
+	int cntCHANGE;
+	int i, j;
+	Bool tmp;
+	
+	cntCHANGE = 0;
+	for(i=0; i<N; i++){
+		for(j=0; j<M; j++){
+			if(T[i][j].now == UNRIPE){
+				tmp = False;
+				tmp = tmp || ( i!=0 && T[i-1][j].now==RIPE );
+				tmp = tmp || ( i!=N-1 && T[i+1][j].now==RIPE );
+				tmp = tmp || ( j!=0 && T[i][j-1].now==RIPE );
+				tmp = tmp || ( j!=M-1 && T[i][j+1].now==RIPE );
+				if(tmp)	cntCHANGE++;
+				T[i][j].isNext = tmp;
 			}
 		}
 	}
 	
-	flag = False;
-	for(i=0; i<M; i++){
-		for(j=0; j<N; j++){
-			boxes[i][j].prev = boxes[i][j].now;
-			boxes[i][j].now = boxes[i][j].next;
-			if(boxes[i][j].prev != boxes[i][j].now)	flag = True;
-		}
-	}
-	
-	return flag;
-}
+	return cntCHANGE;
+} 
 
-Bool isThereUnripe(Status **boxes, int N, int M){
+void apply(Status **T, int M, int N, int *cntUNRIPE){
 	int i, j;
 	
-	for(i=0; i<M; i++){
-		for(j=0; j<N; j++){
-			if(boxes[i][j].now == UNRIPE)	return True;
+	for(i=0; i<N; i++){
+		for(j=0; j<M; j++){
+			if(T[i][j].isNext){
+				T[i][j].now = RIPE;
+				(*cntUNRIPE)--;
+				T[i][j].isNext = False;
+			}
 		}
 	}
-	
-	return False;
 }
 
-void printStatus(Status **boxes, int N, int M){//monitering
-	int i, j;
+/*
+void print(Status **T, int M, int N, int cntUNRIPE){//monitering
+	int i, j, all;
+	char ch;
 	
-	for(i=0; i<M; i++){
-		for(j=0; j<N; j++){
-			printf(" %d", boxes[i][j].now);
+	all = M*N;
+	printf("\n====================\n");
+	printf("- UNRIPE: %d/%d\n\n", cntUNRIPE, all);
+	for(i=0; i<N; i++){
+		for(j=0; j<M; j++){
+			switch(T[i][j].now){
+				case EMPTY:		ch = 'E'; break;
+				case UNRIPE:	ch = 'U'; break;
+				case RIPE:		ch = 'R'; break;
+				default:		ch = 'x';
+			}
+			printf(" %c", ch);
 		}
 		printf("\n");
 	}
+	printf("\n====================\n");
 }
+*/
 
-int main(){
-	int N, M, i, j, x, day, cnt_Unripe;
-	Status **boxes;
-	Status X;
-	Bool isChanged;
+int main() {
+	Status **Tomatos;
+	int M, N;
+	int i, j, day, cntUNRIPE;
+	Bool flag;
 	
 	
-	cnt_Unripe = 0;
-	
-	scanf("%d %d", &N, &M);
-	boxes = (Status **)malloc(M * sizeof(Status *));
-	for(i=0; i<M; i++){
-		boxes[i] = (Status *)malloc(N * sizeof(Status));
-		for(j=0; j<N; j++){
-			scanf("%d", &x);
-			boxes[i][j].now = x;
-			if(x == UNRIPE)		cnt_Unripe++;
-		}
+	/* ----- 1. 초기화 및 입력 ----- */
+	scanf("%d %d", &M, &N);
+	Tomatos = setting(M, N, &cntUNRIPE);
+	if(Tomatos == NULL){
+		printf("Failed malloc.\n");
+		return -1;
 	}
 	
+	
+	/* ----- 2. 시뮬레이션 ----- */  
 	day = 0;
-	while(cnt_Unripe){
-		isChanged = infection(boxes, N, M);
-		if(!isChanged)	break;
+	flag = True;
+	while(cntUNRIPE && flag){
+		if(check(Tomatos, M, N) == 0)	flag = False;
+		if(flag)						apply(Tomatos, M, N, &cntUNRIPE);
+		//print(Tomatos, M, N, cntUNRIPE);//monitering
 		day++;
-		//printf("\nDay %d : \n", day);//monitering
-		//printStatus(boxes, N, M);//monitering
 	}
 	
-	if(isThereUnripe(boxes, N, M))	printf("-1\n");
-	else							printf("%d\n", day);
+	/* ----- 3. 결과출력 ----- */
+	printf("%d\n", cntUNRIPE ? -1 : day);
 	
-	for(i=0; i<M; i++){
-		if(boxes[i] != NULL)	free(boxes[i]);
-	}
-	free(boxes);
+	
+	/* ----- 4. 마무으리 ----- */
+	for(i=0; i<N; i++)	free(Tomatos[i]);
+	free(Tomatos);
+	
 	return 0;
 }
