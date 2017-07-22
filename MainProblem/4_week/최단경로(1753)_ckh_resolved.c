@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-/* µ¥ÀÌÅ© ½ºÆ®¶ó ¾Ë°í¸®Áò */
+/* ï¿½ï¿½ï¿½ï¿½Å© ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ë°ï¿½ï¿½ï¿½ */
 #define INFINITE 100000
 typedef struct node {
 	int vertices;
@@ -24,13 +24,12 @@ void inqueue(int vertices, int distance);
 priorityQueue dequeue();
 void swap(priorityQueue *a, priorityQueue *b);
 int compareChildIndex(int left, int right);
-//void printQueue();
 
 int main() {
 
-	//Á¤Á¡, °£¼± °³¼ö
+	//ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	int nVertices, nEdges;
-	// index±îÁöÀÇ °Å¸®¸¦ ³ªÅ¸³»´Â ¹è¿­
+	// indexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­
 	int *aryDistance;
 
 	int startPoint;
@@ -40,56 +39,19 @@ int main() {
 	/*----------Default Initialization----------*/
 	scanf("%d%d", &nVertices, &nEdges);
 
-	//¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»¤»
-	// sizeof(node)*nVertices+1 °ª°ú , sizeof(node)*(nVertices+1) Â÷ÀÌ ¶§¹®¿¡ ·±Å¸ÀÓ ¿À·ù ¹ß»ý
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// sizeof(node)*nVertices+1 ï¿½ï¿½ï¿½ï¿½ , sizeof(node)*(nVertices+1) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½
 	graphArr = (node*)malloc(sizeof(node)*(nVertices+1));
 	for (int i = 0; i <= nVertices; i++) graphArr[i].nextNode = NULL;
 	priority_Queue = (priorityQueue*)malloc(sizeof(priorityQueue) * 1000000);
 	aryDistance = (int*)malloc(sizeof(int)*(nVertices + 1));
-	/*
-	inqueue(1, 2, 3);
-	printQueue();
-	inqueue(1, 4, 3);
-	printQueue();
-	inqueue(1, 1, 3);
-	printQueue();
-	inqueue(1, 3, 3);
-	printQueue();
-	inqueue(1, 7, 3);
-	printQueue();
-	inqueue(1, 6, 3);
-	printQueue();
-	inqueue(1, 5, 3);
-	printQueue();
-	inqueue(1, 9, 3);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("dequeue °á°ú : %d\n", dequeue().distance);
-	printQueue();
-	printf("\n Å¥ Å×½ºÆ® ³¡\n");
-	system("pause");*/
-	//
+
 	scanf("%d", &startPoint);
-	//ÀÎÁ¢ ¹è¿­ ÃÊ±âÈ­ °¡ÁßÄ¡ ÃÊ±âÈ­
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½Ê±ï¿½È­
 	for (int i = 0; i < nEdges; i++) {
 		int t1, t2, t3;
 		scanf("%d%d%d", &t1, &t2, &t3);
-		//¹æÇâ±×·¡ÇÁÀÌ±â ¶§¹®¿¡ ÇÑ¹ø¸¸ È£Ãâ ÇÏ¸é µÊ.
+		//ï¿½ï¿½ï¿½ï¿½×·ï¿½ï¿½ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¹ï¿½ï¿½ï¿½ È£ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½.
 		nodeInsertIntoList(&graphArr[t1], t2, t3);
 	}
 
@@ -100,21 +62,21 @@ int main() {
 
 	/*--------------Start Dijkstra--------------*/
 
-	/*¿ì¼±¼øÀ§ Å¥ »ç¿ë*/
-	//½ÃÀÛÇÒ¶© ÀÚ±â ÀÚ½Å
+	/*ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½ Å¥ ï¿½ï¿½ï¿½*/
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ ï¿½Ú±ï¿½ ï¿½Ú½ï¿½
 	targetIndex = startPoint;
 	aryDistance[startPoint] = 0;
 	for (int i = 1; i <= nVertices; i++) 
 		inqueue(i, aryDistance[i]);
 	
-	data = dequeue();//5,0,-1
+	data = dequeue();//5,0
 	while (data.vertices != -1) {
-		//µðÅ¥ µÈ ³ðÀÌ ÇöÀç °Å¸®º¸´Ù ÂªÀºÁö ±äÁö °Ë»ç
+		//ï¿½ï¿½Å¥ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ Âªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
 		if (aryDistance[data.vertices] >= data.distance) {
 			aryDistance[data.vertices] = data.distance;
 
 			node *temp = graphArr[data.vertices].nextNode;
-			//ÀÎÁ¢ ³ëµå °Ë»ç
+			//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
 			while (temp!=NULL) {
 				if (aryDistance[temp->vertices] > aryDistance[data.vertices] + temp->weight) {
 					aryDistance[temp->vertices] = aryDistance[data.vertices] + temp->weight;
@@ -152,11 +114,6 @@ void nodeInsertIntoList(node *Head, int vertices, int weight) {
 	newNode->vertices = vertices;
 	newNode->weight = weight;
 
-	/*if (temp->nextNode == NULL) {
-		temp->nextNode = newNode;
-		return;
-	}*/
-
 	while (temp->nextNode != NULL && 
 		temp->nextNode->vertices < newNode->vertices)
 		temp = temp->nextNode;
@@ -164,7 +121,7 @@ void nodeInsertIntoList(node *Head, int vertices, int weight) {
 	if (temp->nextNode != NULL) {
 		if (newNode->vertices == temp->nextNode->vertices) {
 			//loop
-			//ÃÖ´Ü°Å¸®¸¸ ÇÊ¿äÇÑµ¥ ±»ÀÌ weight°ªÀÌ ³ôÀº ³ëµå¸¦ »ðÀÔÇÒ ÇÊ¿ä ¾øÀ½
+			//ï¿½Ö´Ü°Å¸ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Ñµï¿½ ï¿½ï¿½ï¿½ï¿½ weightï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½
 			if (newNode->weight < temp->nextNode->weight)
 				temp->nextNode->weight = newNode->weight;
 			free(newNode);
@@ -215,22 +172,22 @@ priorityQueue dequeue() {
 	temp = 1;
 	while (flag) {
 		int leftChild = -1, rightChild = -1;
-		/*ÀÚ¼Õ ³ëµå index°¡ Á¤·ÄµÈ °á°ú ÂüÁ¶ÇÏÁö ¾Ê±â À§ÇØ, Áï À¯È¿ÇÑ ¹üÀ§¿¡ ÀÖµµ·Ï*/
+		/*ï¿½Ú¼ï¿½ ï¿½ï¿½ï¿½ indexï¿½ï¿½ ï¿½ï¿½ï¿½Äµï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½*/
 		if (2 * temp < pointing) leftChild = 2 * temp;
 		if (2 * temp + 1 < pointing) rightChild = 2 * temp + 1;
 
 		switch (compareChildIndex(leftChild, rightChild)) {
-		//ÀÚ½ÄÀÌ ÇÏ³ªµµ ¾ø´Â °æ¿ì
+		//ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		case 0:
 			flag = 0;
 			break;
-		//ÀÚ½ÄÀÌ ÇÏ³ª¸¸ ÀÖ´Â °æ¿ì
+		//ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½
 		case 1:
 			if (priority_Queue[leftChild].distance < priority_Queue[temp].distance)
 				swap(&priority_Queue[leftChild], &priority_Queue[temp]);
 			flag = 0;
 			break;
-		//ÀÚ½ÄÀÌ µÑ¸¸ ÀÖ´Â °æ¿ì
+		//ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ñ¸ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½
 		case 2:
 			if (priority_Queue[leftChild].distance <= priority_Queue[rightChild].distance)
 				target = leftChild;
@@ -254,11 +211,3 @@ int compareChildIndex(int left, int right) {
 	if (left != -1 && right == -1) return 1;
 	return 2;
 }
-/*
-void printQueue() {
-	int i;
-	printf("\n");
-	for (i = 1; i < pointing; i++) {
-		printf("%d ", priority_Queue[i].distance);
-	}
-}*/
